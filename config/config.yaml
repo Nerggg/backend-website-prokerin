@@ -1,0 +1,10 @@
+env: development
+private_key: jwt-private-key-sizenasional
+token_ttl: "86400000"
+database:
+  #connection to postgresql
+  host: 127.0.0.1
+  port: 5432
+  db: prokerin-db
+  username: postgres
+  password: postgres
