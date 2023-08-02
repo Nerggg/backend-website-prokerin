@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  backend-website-prokerin:
+    container_name: backend-website-prokerin
+    hostname: backend-website-prokerin
+    restart: on-failure
+    build:
+      dockerfile: Dockerfile
+      target: local
+    ports:
+      - "7851:8001"
+
+  prokerin-postgresql:
+    image: postgres:latest
+    container_name: prokerin-postgresql
+    hostname: prokerin-postgresql
+    restart: always
+    ports:
+      - "9140:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: prokerin-db
+    volumes:
+      - ./prokerin-data:/var/lib/postgresql/data
