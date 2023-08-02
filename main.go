@@ -2,6 +2,7 @@ package main
 
 import (
 	"backend-prokerin/api"
+	"backend-prokerin/initialization"
 	"os"
 
 	"github.com/gin-contrib/gzip"
@@ -21,6 +22,8 @@ func main() {
 
 	api.SetupApiRoute(router)
 	var port string = os.Getenv("PORT")
+
+	initialization.CreateSuperAdmin()
 
 	if port == "" {
 		port = "8001"

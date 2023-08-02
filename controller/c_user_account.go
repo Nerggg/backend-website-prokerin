@@ -53,13 +53,13 @@ func Login(context *gin.Context) {
 	u_service := services.NewUserAccountService(db_connection)
 
 	if err := context.ShouldBindJSON(&input); err != nil {
-		context.JSON(http.StatusOK, gin.H{"success": false, "message": err})
+		context.JSON(http.StatusOK, gin.H{"success": false, "message": "adasdasd"})
 		return
 	}
 
 	validator := validator.New()
 	if err := validator.Struct(input); err != nil {
-		context.JSON(http.StatusOK, gin.H{"success": false, "message": err})
+		context.JSON(http.StatusOK, gin.H{"success": false, "message": "aaa"})
 		return
 	}
 
