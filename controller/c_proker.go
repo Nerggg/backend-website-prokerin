@@ -37,13 +37,13 @@ func AddProker(context *gin.Context) {
 	}
 
 	proker := models.Proker{
-		Status:      1,
-		IdCreator:   user.ID,
-		Name:        input.Name,
-		Description: input.Description,
-		// Image: , ada cara khusus
-		// TimeLineImage: ,
-		Like: 0,
+		Status:        1,
+		IdCreator:     user.ID,
+		Name:          input.Name,
+		Description:   input.Description,
+		Image:         input.Image,
+		TimeLineImage: input.TimeLineImage,
+		Like:          0,
 	}
 
 	_, err_created := p_service.InsertToDatabase(&proker)
