@@ -78,6 +78,7 @@ func Login(context *gin.Context) {
 		}
 		data := schema.SuccesLogin{
 			AccessToken: jwt,
+			User:        user,
 		}
 
 		context.JSON(http.StatusOK, gin.H{"data": data, "success": true})

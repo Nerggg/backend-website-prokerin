@@ -16,7 +16,7 @@ type UserAccount struct {
 	UpdatedAt    *time.Time     `json:"update_at"`
 	Status       int8           `gorm:"not null" json:"status"`
 	Email        string         `gorm:"not null,unique" json:"email"`
-	Password     string         `gorm:"not null" json:"password"`
+	Password     string         `gorm:"not null" json:"-"`
 	NickName     string         `gorm:"not null,unique" json:"nick_name"`
 	Instansi     string         `gorm:"" json:"instasnsi"`
 	IsAdmin      int8           `gorm:"" json:"is_admin"` // 0 super, 1 user, 2 admin
