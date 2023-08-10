@@ -40,11 +40,11 @@ func setupProtectedRoute(router *gin.Engine) {
 	protectedRoutes.GET("/proker/:id/unlike", controller.UnLikeProker)
 	protectedRoutes.DELETE("/proker/:id", controller.DeleteProker)
 
-	protectedRoutes.POST("/comment", controller.AddComment)
-	protectedRoutes.GET("/comment/:id", controller.GetComment)
+	protectedRoutes.POST("/comment/:proker", controller.AddComment)
+	protectedRoutes.GET("/comment/:proker", controller.GetComment)
 	protectedRoutes.GET("/comment", controller.GetAllComment)
-	protectedRoutes.GET("/comment/:id/like", controller.LikeComment)
-	protectedRoutes.GET("/comment/:id/unlike", controller.UnLikeComment)
+	protectedRoutes.GET("/comment/:proker/:id/like", controller.LikeComment)
+	protectedRoutes.GET("/comment/:proker/:id/unlike", controller.UnLikeComment)
 	protectedRoutes.DELETE("/comment/:id", controller.DeleteComment)
 
 }

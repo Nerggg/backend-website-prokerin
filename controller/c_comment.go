@@ -15,7 +15,7 @@ import (
 func AddComment(context *gin.Context) {
 	var input schema.CommentBodyReq
 	db_connection := db.Connect()
-	id := context.Params.ByName("id")
+	proker := context.Params.ByName("proker")
 
 	p_service := services.NewCommentService(db_connection)
 
@@ -40,7 +40,7 @@ func AddComment(context *gin.Context) {
 	comment := models.Comment{
 		Status:      1,
 		IdCreator:   user.ID,
-		IdProker:    id,
+		IdProker:    proker,
 		Description: input.Description,
 		// Image: , ada cara khusus
 		// TimeLineImage: ,
@@ -59,7 +59,7 @@ func AddComment(context *gin.Context) {
 func GetComment(context *gin.Context) {
 	db_connection := db.Connect()
 	p_service := services.NewCommentService(db_connection)
-	id := context.Params.ByName("id")
+	proker := context.Params.ByName("proker")
 
 	// validate user
 	user := ValidateUser(context)
@@ -68,7 +68,7 @@ func GetComment(context *gin.Context) {
 		return
 	}
 
-	comment, err_find := p_service.Find(id)
+	comment, err_find := p_service.FindByProker(proker)
 	if err_find != nil {
 		context.JSON(http.StatusOK, gin.H{"success": false, "message": err_find})
 		return
