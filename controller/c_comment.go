@@ -98,7 +98,6 @@ func LikeComment(context *gin.Context) {
 	db_connection := db.Connect()
 	id := context.Params.ByName("id")
 	p_service := services.NewCommentService(db_connection)
-	u_service := services.NewUserAccountService(db_connection)
 
 	// validate user
 	user := ValidateUser(context)
@@ -108,36 +107,38 @@ func LikeComment(context *gin.Context) {
 	}
 
 	// like comment
-	_, err_like := p_service.LikeComment(id, true)
+	comment, err_like := p_service.LikeComment(id, true)
 	if err_like != nil {
 		context.JSON(http.StatusOK, gin.H{"success": false, "message": err_like})
 		return
 	}
 
-	// update like comment in user account
-	var liked_data map[string]bool
-	err_unmarshal := json.Unmarshal(user.LikedComment, &liked_data)
-	if err_unmarshal != nil {
-		context.JSON(http.StatusOK, gin.H{"success": false, "message": err_unmarshal})
-		return
+	// update like comment in comment
+	liked_comment := make(map[string]bool)
+	if comment.Liked != nil {
+		err_unmarshal_c := json.Unmarshal(comment.Liked, &liked_comment)
+		if err_unmarshal_c != nil {
+			context.JSON(http.StatusOK, gin.H{"success": false, "message": err_unmarshal_c})
+			return
+		}
 	}
 
-	liked_data[id] = true
-
-	json_data, err_marhsal := json.Marshal(liked_data)
+	liked_comment[user.ID] = true
+	json_data_c, err_marhsal := json.Marshal(liked_comment)
 	if err_marhsal != nil {
 		context.JSON(http.StatusOK, gin.H{"success": false, "message": err_marhsal})
 		return
 	}
+	comment.Liked = json_data_c
 
-	user.LikedComment = json_data
-	var changesUser []string = []string{"LikedComment"}
+	var changesComment []string = []string{"Liked"}
 
-	_, err_update := u_service.Update(user, changesUser, user.ID)
-	if err_update != nil {
-		context.JSON(http.StatusOK, gin.H{"success": false, "message": err_update})
+	_, err_update_c := p_service.UpdateRecord(comment, comment.ID, changesComment)
+	if err_update_c != nil {
+		context.JSON(http.StatusOK, gin.H{"success": false, "message": err_update_c})
 		return
 	}
+
 	context.JSON(http.StatusOK, gin.H{"data": nil, "success": true})
 }
 
@@ -145,7 +146,6 @@ func UnLikeComment(context *gin.Context) {
 	db_connection := db.Connect()
 	id := context.Params.ByName("id")
 	p_service := services.NewCommentService(db_connection)
-	u_service := services.NewUserAccountService(db_connection)
 
 	// validate user
 	user := ValidateUser(context)
@@ -155,36 +155,37 @@ func UnLikeComment(context *gin.Context) {
 	}
 
 	// like comment
-	_, err_like := p_service.LikeComment(id, false)
+	comment, err_like := p_service.LikeComment(id, false)
 	if err_like != nil {
 		context.JSON(http.StatusOK, gin.H{"success": false, "message": err_like})
 		return
 	}
 
-	// update like comment in user account
-	var liked_data map[string]bool
-	err_unmarshal := json.Unmarshal(user.LikedComment, &liked_data)
-	if err_unmarshal != nil {
-		context.JSON(http.StatusOK, gin.H{"success": false, "message": err_unmarshal})
-		return
+	// update like comment in comment
+	liked_comment := make(map[string]bool)
+	if comment.Liked != nil {
+		err_unmarshal_c := json.Unmarshal(comment.Liked, &liked_comment)
+		if err_unmarshal_c != nil {
+			context.JSON(http.StatusOK, gin.H{"success": false, "message": err_unmarshal_c})
+			return
+		}
 	}
-
-	liked_data[id] = false
-
-	json_data, err_marhsal := json.Marshal(liked_data)
+	liked_comment[user.ID] = false
+	json_data_c, err_marhsal := json.Marshal(liked_comment)
 	if err_marhsal != nil {
 		context.JSON(http.StatusOK, gin.H{"success": false, "message": err_marhsal})
 		return
 	}
+	comment.Liked = json_data_c
 
-	user.LikedComment = json_data
-	var changesUser []string = []string{"LikedComment"}
+	var changesComment []string = []string{"Liked"}
 
-	_, err_update := u_service.Update(user, changesUser, user.ID)
-	if err_update != nil {
-		context.JSON(http.StatusOK, gin.H{"success": false, "message": err_update})
+	_, err_update_c := p_service.UpdateRecord(comment, comment.ID, changesComment)
+	if err_update_c != nil {
+		context.JSON(http.StatusOK, gin.H{"success": false, "message": err_update_c})
 		return
 	}
+
 	context.JSON(http.StatusOK, gin.H{"data": nil, "success": true})
 }
 
